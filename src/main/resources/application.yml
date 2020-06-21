@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/books_management?serverTimezone=GMT%2B8&allowMultiQueries=true&characterEncoding=UTF-8
+#    name: root
+#    password: '123456'
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      username: root
+      password: '123456'
+      url: jdbc:mysql://localhost:3306/books_management?serverTimezone=GMT%2B8&allowMultiQueries=true&characterEncoding=UTF-8
+
+server:
+  port: 8000
+
+

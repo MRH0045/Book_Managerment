@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.BooksMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.library.pojo.Books">
+        <id column="id" property="id" />
+        <result column="isbn" property="isbn" />
+        <result column="name" property="name" />
+        <result column="book_picture" property="bookPicture" />
+        <result column="author" property="author" />
+        <result column="name_pub" property="namePub" />
+        <result column="data_pub" property="dataPub" />
+        <result column="total" property="total" />
+        <result column="details" property="details" />
+        <result column="lend_count" property="lendCount" />
+        <result column="book_kind" property="bookKind" />
+        <result column="book_site" property="bookSite" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, isbn, name, book_picture, author, name_pub, data_pub, total, details, lend_count, book_kind, book_site, create_time, update_time
+    </sql>
+
+</mapper>
