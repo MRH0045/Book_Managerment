@@ -1,6 +1,6 @@
 package com.library.dao;
 
-import com.library.pojo.Books;
+import com.library.pojo.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author 0045M
  * @since 2020-06-23
  */
-public interface BooksMapper extends BaseMapper<Books> {
+public interface RoleMapper extends BaseMapper<Role> {
 
 }

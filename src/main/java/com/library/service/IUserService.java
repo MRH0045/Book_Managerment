@@ -34,4 +34,9 @@ public interface IUserService extends IService<User> {
      */
     ServerResponse logout();
 
+
+   User getByCode(String code);
+
+    boolean updatePassword(String code, String oldPassword, String newPassword);
+
 }

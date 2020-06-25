@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ILibManagerService extends IService<LibManager> {
 
+    LibManager getByCode(String code);
+
+    boolean updatePassword(String code, String oldPassword, String newPassword);
+
 }

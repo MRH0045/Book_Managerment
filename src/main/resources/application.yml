@@ -12,5 +12,15 @@ spring:
 
 server:
   port: 8000
+  version: v1
 
 
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+
+upload:
+  picture:
+    path: D:/library/upload/img/
+  #  path: /usr/local/course-accreditation/upload/img/

@@ -28,15 +28,15 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo(){
-        Contact contact = new Contact("mrh","https://blog.csdn.net/ban0045","851417245@qq.com");
+        Contact contact = new Contact("mrh","https://baidu.com","851417245@qq.com");
         return new ApiInfo(
                 "图书管理系统Api文档",
                 "图书管理系统Api文档",
                 "v1.0",
-                "https://blog.csdn.net/ban0045",
+                "https://baidu.com",
                 contact,
                 "Apach 2.0许可",
-                "https://blog.csdn.net/ban0045",
+                "https://baidu.com",
                 new ArrayList<>()
         );
 

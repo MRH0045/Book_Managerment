@@ -21,13 +21,17 @@ public class Mygeneration {
     @Test
     public static void main(String[] args) {
 
+
+        String projectPath = System.getProperty("user.dir");
+
+
         AutoGenerator autoGenerator = new AutoGenerator();
 
 //        全局配置
         GlobalConfig globalConfig = new GlobalConfig();
         globalConfig.setActiveRecord(true)
                 .setAuthor("0045M")
-                .setOutputDir("E:\\Library\\src\\main\\java")//生成路径
+                .setOutputDir(projectPath +"\\src\\main\\java")//生成路径
                 .setFileOverride(true)
                 .setIdType(IdType.AUTO)
                 .setServiceImplName("%sService")
@@ -49,7 +53,7 @@ public class Mygeneration {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
-        strategy.setInclude("books");
+        strategy.setInclude("role");
 //                .setInclude("book_type");
 //                .setInclude("book_location");
 //                .setInclude("borrow_log");
@@ -57,7 +61,6 @@ public class Mygeneration {
 //                .setInclude("oper_log");
 //                .setInclude("sys_manager");
 //                .setInclude("user");
-
 
 //        包名策略配置
         PackageConfig packageConfig = new PackageConfig();

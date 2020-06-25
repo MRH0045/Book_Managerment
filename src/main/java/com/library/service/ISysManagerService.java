@@ -1,5 +1,6 @@
 package com.library.service;
 
+import com.library.pojo.LibManager;
 import com.library.pojo.SysManager;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISysManagerService extends IService<SysManager> {
 
+    SysManager getByCode(String code);
+
+    boolean updatePassword(String code, String oldPassword, String newPassword);
 }

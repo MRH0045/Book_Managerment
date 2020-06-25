@@ -1,8 +1,10 @@
 package com.library.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.library.common.Const;
 import com.library.common.ServerResponse;
+import com.library.common.exception.ConflictException;
 import com.library.pojo.User;
 import com.library.dao.UserMapper;
 import com.library.service.IUserService;
@@ -59,6 +61,30 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
             session.invalidate();
         }
         return ServerResponse.createBySuccessMessage("注销成功！");
+    }
+
+    @Override
+    public User getByCode(String code) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getStudentNumber, code);       // 通过学号查询
+        return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public boolean updatePassword(String code, String oldPassword, String newPassword) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.eq(User::getStudentNumber,code).eq(User::getPassword,oldPassword);
+        User user = this.baseMapper.selectOne(queryWrapper);
+        if(user != null){
+            user.setPassword(newPassword);
+            LambdaQueryWrapper<User> updateWrapper = new LambdaQueryWrapper<>();
+            updateWrapper.eq(User::getStudentNumber,code);
+            this.baseMapper.update(user,updateWrapper);
+            return true;
+
+        }
+        throw new ConflictException("密码错误，修改失败");
     }
 
 

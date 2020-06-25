@@ -1,4 +1,4 @@
-package com.library.Form;
+package com.library.model.Form;
 
 public class queryBooksForm {
 

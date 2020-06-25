@@ -20,37 +20,18 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Books extends Model<Books> {
+public class Role extends Model<Role> {
 
 private static final long serialVersionUID=1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String isbn;
+    private String code;
 
-    private String name;
+    private String role;
 
-    private String bookPicture;
-
-    private String author;
-
-    private String namePub;
-
-    private LocalDateTime dataPub;
-
-    private Integer total;
-
-    private String details;
-
-    /**
-     * 已借出数量
-     */
-    private Integer lendCount;
-
-    private Integer bookKind;
-
-    private Integer bookSite;
+    private String description;
 
     private LocalDateTime createTime;
 
