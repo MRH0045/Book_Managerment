@@ -25,4 +25,8 @@
         id, isbn, name, book_picture, author, name_pub, data_pub, total, details, lend_count, book_kind, book_site, create_time, update_time
     </sql>
 
+    <select id="selectPageVo" resultType="com.library.pojo.Books">
+    SELECT id,name FROM user WHERE state=#{state}
+    </select>
+
 </mapper>

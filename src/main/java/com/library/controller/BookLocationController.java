@@ -74,18 +74,26 @@ public class BookLocationController {
 
     /**
          * @Author MRH0045
-         * @Description  根据id获得单个帖子
+         * @Description  根据id获得单个图书定位
          * @Date 13:56 2020/6/21
          * @Param [id]
          * @return com.library.common.ServerResponse<com.library.pojo.BookLocation>
          **/
-    @ApiOperation("根据id获得单个帖子")
+    @ApiOperation("根据id获得单个图书")
     @ApiImplicitParam(name = "id",value = "图书定位id",required = true,paramType = "query",dataType = "int",example = "1")
     @GetMapping
     public ServerResponse<BookLocation> getLocation(Integer id){
         return  bookLocationService.queryBookLocation(id);
     }
 
+
+    /**
+         * @Author MRH0045
+         * @Description 获得全部定位
+         * @Date 1:35 2020/6/26
+         * @Param []
+         * @return com.library.common.ServerResponse<java.util.List<com.library.pojo.BookLocation>>
+         **/
     @ApiOperation("获得全部图书定位")
     @GetMapping("/getAllBookLocation")
     public ServerResponse<List<BookLocation>> getAllBookLocation(){

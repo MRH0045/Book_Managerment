@@ -24,7 +24,7 @@ public class Const {
 
     public static final Integer DEFAULT_PAGE = 1;
 
-    public static final Integer DEFAULT_PAGE_SIZE = 5;
+    public static final Integer DEFAULT_PAGE_SIZE = 10;
 
 
     /**
