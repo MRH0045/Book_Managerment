@@ -203,7 +203,7 @@ public class UserManage {
                 s.setStudentNumber(code);
                 s.setPassword(password);
                 userService.saveOrUpdate(s);
-                return ServerResponse.createByErrorMessage("注册成功");
+                return ServerResponse.createBySuccessMessage("注册成功");
             } else {
                 return ServerResponse.createByErrorMessage("此学号已被注册");
             }
@@ -215,7 +215,7 @@ public class UserManage {
                 t.setUsername(code);
                 t.setPassword(password);
                 libManagerService.saveOrUpdate(t);
-                return ServerResponse.createByErrorMessage("注册成功");
+                return ServerResponse.createBySuccessMessage("注册成功");
             } else {
                 return ServerResponse.createByErrorMessage("此工号已被注册");
             }
@@ -250,11 +250,9 @@ public class UserManage {
             throw new AuthenticationException("请登录后访问！");
         token = JWTUtil.decryptToken(token);            // 解密token
         String code = JWTUtil.getName(token);
-
         User user = userService.getByCode(code);
         LibManager libManager = libManagerService.getByCode(code);
         SysManager sysManager = sysManagerService.getByCode(code);
-
         String password = null;
         if (user != null) {
             password = user.getPassword();

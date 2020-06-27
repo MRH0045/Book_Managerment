@@ -47,6 +47,20 @@ public class BooksController {
         return booksService.queryBooksByForm(queryBooksForm);
     }
 
+    @ApiOperation("用户借书")
+    @PutMapping("/borrow")
+    public  ServerResponse borrowBook(Integer bookId){
+        return booksService.BorrowBook(bookId);
+    }
+
+    @ApiOperation("归还图书")
+    @PutMapping("/return")
+    public ServerResponse returnBook(Integer borrowLogId){
+        return booksService.returnBook(borrowLogId);
+    }
+
+
+
 
 
 }

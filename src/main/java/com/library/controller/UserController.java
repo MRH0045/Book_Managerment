@@ -1,10 +1,13 @@
 package com.library.controller;
 
 import com.library.common.ServerResponse;
+import com.library.model.Form.queryUserForm;
 import com.library.service.impl.UserService;
 import io.swagger.annotations.Api;
 
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,13 +23,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
     UserService userService;
 
-    @ApiOperation("用户登出")
-    @GetMapping("/logout")
-    public ServerResponse managerLogin()
-    {
-        return userService.logout();
+
+    @ApiOperation("根据表单分页查找满足条件的用户")
+    @GetMapping()
+    public ServerResponse queryByForm(queryUserForm queryUserForm){
+        return userService.queryByForm(queryUserForm);
     }
 
 }

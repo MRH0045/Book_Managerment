@@ -4,10 +4,17 @@ package com.library.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
+import com.library.common.Const;
 import com.library.common.ServerResponse;
+import com.library.dao.BorrowLogMapper;
+import com.library.dao.UserMapper;
+import com.library.manage.UserManage;
 import com.library.model.Form.queryBooksForm;
 import com.library.pojo.Books;
 import com.library.dao.BooksMapper;
+import com.library.pojo.BorrowLog;
+import com.library.pojo.User;
 import com.library.service.IBooksService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +34,16 @@ import java.time.LocalDateTime;
 @Service
 public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBooksService {
 
-    @Autowired
+    @Autowired(required=false)
     BooksMapper booksMapper;
+
+    @Autowired(required = false)
+    UserMapper userMapper;
+
+    @Autowired(required = false)
+    BorrowLogMapper borrowLogMapper;
+
+    UserManage userManage;
 
     /**
          * @Author MRH0045
@@ -63,12 +78,12 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
                 .like(queryBooksForm.getKeyWords()!=null,"details",queryBooksForm.getKeyWords())
                 .eq(queryBooksForm.getBookKind()!=null,"book_kind",queryBooksForm.getBookKind())
                 .eq(queryBooksForm.getBookSite()!=null,"book_site",queryBooksForm.getBookSite());
-//                .orderByDesc(queryBooksForm.getSortType()==0,"create_time")
- //              .orderByDesc(queryBooksForm.getSortType()==1,"update_time");
+//                .orderByDesc(queryBooksForm.getSortType()==1,"create_time")
+ //              .orderByDesc(queryBooksForm.getSortType()==0,"update_time");
         IPage iPage = booksMapper.selectPage(page, queryWrapper);
-//        if(iPage.getRecords().isEmpty()){
-//            return ServerResponse.createByErrorMessage("无符合条件的图书！");
-//        }
+        if(iPage.getRecords().isEmpty()){
+            return ServerResponse.createBySuccessMessage("无符合条件的图书！");
+        }
         return ServerResponse.createBySuccess(iPage.getRecords());
     }
 
@@ -102,6 +117,48 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
                 ServerResponse.createByErrorMessage("更新失败！");
     }
 
+    @Override
+    public ServerResponse BorrowBook(Integer BookId) {
+        String code = userManage.getCodeByToken();
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("student_number",code);
+        User user = userMapper.selectOne(wrapper);
+       // User user = userMapper.selectById(1);
+        if(user.getStatus()==0){
+            Books books = booksMapper.selectById(BookId);
+            BorrowLog borrowLog = new BorrowLog();
+            if(books.getLendCount()<books.getTotal()){
+                books.setLendCount(books.getLendCount()+1);
+                booksMapper.updateById(books);
+                borrowLog.setBookId(BookId);
+                borrowLog.setUserId(user.getId());
+                borrowLog.setStatus(Const.UNRETURN);
+                borrowLog.setCreateTime(LocalDateTime.now());
+                borrowLog.setUpdateTime(LocalDateTime.now());
+                borrowLog.setBorrowTime(LocalDateTime.now());
+                return borrowLogMapper.insert(borrowLog)>0?
+                        ServerResponse.createBySuccessMessage("借书成功"):
+                        ServerResponse.createByErrorMessage("借书失败");
+            }
+            return ServerResponse.createByErrorMessage("仓库图书不足！");
+        }
+        return ServerResponse.createByErrorMessage("账户已过期！");
+    }
+
+    @Override
+    public ServerResponse returnBook(Integer BorrowLogId) {
+        BorrowLog borrowLog = borrowLogMapper.selectById(BorrowLogId);
+        Books books = booksMapper.selectById(borrowLog.getBookId());
+        books.setLendCount(books.getLendCount()-1);
+        booksMapper.updateById(books);
+        borrowLog.setStatus(Const.RETURNED);
+        borrowLog.setReturnTime(LocalDateTime.now());
+        borrowLog.setUpdateTime(LocalDateTime.now());
+        return borrowLogMapper.updateById(borrowLog)>0?
+                ServerResponse.createBySuccessMessage("归还成功！"):
+                ServerResponse.createByErrorMessage("归还失败");
+
+    }
 
 
 //    public IPage<Books> selectUserPage(Page<Books> page, Integer state) {

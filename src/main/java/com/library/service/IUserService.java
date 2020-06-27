@@ -1,6 +1,7 @@
 package com.library.service;
 
 import com.library.common.ServerResponse;
+import com.library.model.Form.queryUserForm;
 import com.library.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,26 +17,11 @@ public interface IUserService extends IService<User> {
 
     User queryById(int id);
 
-    /**
-     * @Author: 0045M
-     * @Description:用户登录
-     * @Param
-     * @return
-     * @Date: 18:58 2020/5/29
-     */
-    ServerResponse login(String username,String password);
+    User getByCode(String code);
 
-    /**
-     * @Author: 0045M
-     * @Description:用户登出
-     * @Param
-     * @return
-     * @Date: 18:58 2020/5/29
-     */
-    ServerResponse logout();
+    ServerResponse removeUser(Integer id);
 
-
-   User getByCode(String code);
+    ServerResponse queryByForm(queryUserForm queryUserForm);
 
     boolean updatePassword(String code, String oldPassword, String newPassword);
 

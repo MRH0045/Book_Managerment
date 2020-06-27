@@ -3,6 +3,14 @@ package com.library.common;
 public class Const {
 
 
+    /**
+         * @Description 图书归还状态
+         * @Date 18:49 2020/6/27
+         **/
+
+    public static final Integer  UNRETURN = 1;
+
+    public static final Integer  RETURNED = 0;
 
     /**
          * @Description  用户角色
@@ -48,16 +56,9 @@ public class Const {
          * 用户状态
          */
         NORMAL(0,"正常"),
-        PROHIBITION(1,"已封禁"),
-        NEED_INFO(2,"未完善信息");
+        PROHIBITION(1,"已封禁");
 
-
-
-
-
-
-
-        private int status;
+        private Integer status;
         private String desc;
 
         STATUS(int status, String desc) {

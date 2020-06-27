@@ -2,18 +2,18 @@ package com.library.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.library.common.Const;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.library.common.ServerResponse;
 import com.library.common.exception.ConflictException;
+import com.library.model.Form.queryUserForm;
 import com.library.pojo.User;
 import com.library.dao.UserMapper;
 import com.library.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.library.utils.ServletUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 @Service
 public class UserService extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
+    @Autowired(required=false)
     UserMapper userMapper;
 
 
@@ -36,33 +36,14 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
     }
 
 
-    @Override
-    public ServerResponse login(String username, String password) {
 
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("student_number",username);
-        User user = userMapper.selectOne(queryWrapper);
-        if(user != null && user.getPassword().equals(password))
-        {
-            HttpSession session = ServletUtils.getSession();
-            session.setAttribute("role", Const.USER);
-            session.setAttribute("userId",user.getId());
-
-            return ServerResponse.createBySuccessMessage("登录成功！");
-        }
-        return ServerResponse.createByErrorMessage("用户名或密码错误！");
-    }
-
-    @Override
-    public ServerResponse logout() {
-
-        HttpSession session = ServletUtils.getSession();
-        if(Const.USER.equals(session.getAttribute("role"))){
-            session.invalidate();
-        }
-        return ServerResponse.createBySuccessMessage("注销成功！");
-    }
-
+    /**
+         * @Author MRH0045
+         * @Description 通过学号查询用户
+         * @Date 11:04 2020/6/27
+         * @Param [code]
+         * @return com.library.pojo.User
+         **/
     @Override
     public User getByCode(String code) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
@@ -70,10 +51,54 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
         return baseMapper.selectOne(queryWrapper);
     }
 
+    /**
+         * @Author MRH0045
+         * @Description 通过用户id删除用户
+         * @Date 11:04 2020/6/27
+         * @Param [id]
+         * @return com.library.common.ServerResponse
+         **/
+    @Override
+    public ServerResponse removeUser(Integer id) {
+        return userMapper.deleteById(id)>0?
+                ServerResponse.createBySuccessMessage("删除成功！"):
+                ServerResponse.createByErrorMessage("删除失败！");
+    }
+
+
+    /**
+         * @Author MRH0045
+         * @Description 根据表单的分页查询满足条件的用户
+         * @Date 11:34 2020/6/27
+         * @Param [queryUserForm]
+         * @return com.library.common.ServerResponse
+         **/
+    @Override
+    public ServerResponse queryByForm(queryUserForm queryUserForm) {
+        Page page = new Page<>(queryUserForm.getPage(),queryUserForm.getPageSize());
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.like(queryUserForm.getKeyWords()!=null,"name",queryUserForm.getKeyWords()).or()
+                .like(queryUserForm.getKeyWords()!=null,"student_number",queryUserForm.getKeyWords()).or()
+                .like(queryUserForm.getKeyWords()!=null,"phone",queryUserForm.getKeyWords()).or()
+                .like(queryUserForm.getKeyWords()!=null,"details",queryUserForm.getKeyWords());
+         //    .orderByDesc(queryUserForm.getSortType()==0,"create_time")
+           //    .orderByDesc(queryUserForm.getSortType()==1,"update_time");
+        IPage iPage = userMapper.selectPage(page,userQueryWrapper);
+        return ServerResponse.createBySuccess(iPage.getRecords());
+
+    }
+
+
+    /**
+         * @Author MRH0045
+         * @Description 根据旧密码修改密码
+         * @Date 11:03 2020/6/27
+         * @Param [code, oldPassword, newPassword]
+         * @return boolean
+         **/
     @Override
     public boolean updatePassword(String code, String oldPassword, String newPassword) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-
         queryWrapper.eq(User::getStudentNumber,code).eq(User::getPassword,oldPassword);
         User user = this.baseMapper.selectOne(queryWrapper);
         if(user != null){
@@ -82,7 +107,6 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
             updateWrapper.eq(User::getStudentNumber,code);
             this.baseMapper.update(user,updateWrapper);
             return true;
-
         }
         throw new ConflictException("密码错误，修改失败");
     }

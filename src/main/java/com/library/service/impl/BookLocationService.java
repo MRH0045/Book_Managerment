@@ -52,6 +52,7 @@ public class BookLocationService extends ServiceImpl<BookLocationMapper, BookLoc
 
     @Override
     public ServerResponse queryBookLocation(Integer id) {
+
         return ServerResponse.createBySuccess(bookLocationMapper.selectById(id));
     }
 

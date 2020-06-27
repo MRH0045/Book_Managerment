@@ -38,6 +38,9 @@ private static final long serialVersionUID=1L;
 
     private String password;
 
+
+
+
     private String headPortrait;
 
     private Integer sex;
