@@ -1,6 +1,7 @@
 package com.library.service;
 
 import com.library.common.ServerResponse;
+import com.library.model.Form.queryBorrowLogForm;
 import com.library.pojo.BorrowLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,5 +20,7 @@ public interface IBorrowLogService extends IService<BorrowLog> {
     ServerResponse removeBorrowLog(Integer id);
 
     ServerResponse queryAll();
+
+    ServerResponse queryByForm(queryBorrowLogForm queryBorrowLogForm);
 
 }

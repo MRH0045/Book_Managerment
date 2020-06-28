@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -28,9 +29,17 @@ public class BookTypeService extends ServiceImpl<BookTypeMapper, BookType> imple
 
     @Override
     public ServerResponse addBookType(BookType bookType) {
-        return bookTypeMapper.insert(bookType)>0?
-                ServerResponse.createBySuccessMessage("添加成功"):
-        ServerResponse.createByErrorMessage("添加失败");
+        QueryWrapper<BookType> wrapper = new QueryWrapper<>();
+        wrapper.eq("name",bookType.getName());
+        BookType bookType1 = bookTypeMapper.selectOne(wrapper);
+        if(bookType1==null){
+            bookType.setCreateTime(LocalDateTime.now());
+            bookType.setUpdateTime(LocalDateTime.now());
+            return bookTypeMapper.insert(bookType)>0?
+                    ServerResponse.createBySuccessMessage("添加成功"):
+                    ServerResponse.createByErrorMessage("添加失败");
+        }
+        return ServerResponse.createByErrorMessage("图书种类已存在");
     }
 
     @Override
@@ -42,9 +51,16 @@ public class BookTypeService extends ServiceImpl<BookTypeMapper, BookType> imple
 
     @Override
     public ServerResponse updateBookType(BookType bookType) {
-        return bookTypeMapper.updateById(bookType)>0?
-                ServerResponse.createBySuccessMessage("更新成功"):
-                ServerResponse.createByErrorMessage("更新失败");
+        QueryWrapper<BookType> wrapper = new QueryWrapper<>();
+        wrapper.eq("name",bookType.getName());
+        BookType bookType1 = bookTypeMapper.selectOne(wrapper);
+        if(bookType1!=null){
+            bookType.setUpdateTime(LocalDateTime.now());
+            return bookTypeMapper.updateById(bookType)>0?
+                    ServerResponse.createBySuccessMessage("更新成功"):
+                    ServerResponse.createByErrorMessage("更新失败");
+        }
+        return ServerResponse.createByErrorMessage("图书种类已存在，修改失败！");
     }
 
     @Override

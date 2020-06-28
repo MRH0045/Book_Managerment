@@ -80,12 +80,19 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
         userQueryWrapper.like(queryUserForm.getKeyWords()!=null,"name",queryUserForm.getKeyWords()).or()
                 .like(queryUserForm.getKeyWords()!=null,"student_number",queryUserForm.getKeyWords()).or()
                 .like(queryUserForm.getKeyWords()!=null,"phone",queryUserForm.getKeyWords()).or()
-                .like(queryUserForm.getKeyWords()!=null,"details",queryUserForm.getKeyWords());
-         //    .orderByDesc(queryUserForm.getSortType()==0,"create_time")
-           //    .orderByDesc(queryUserForm.getSortType()==1,"update_time");
+                .like(queryUserForm.getKeyWords()!=null,"details",queryUserForm.getKeyWords())
+            .orderByDesc(queryUserForm.getSortType()==0,"create_time")
+               .orderByDesc(queryUserForm.getSortType()==1,"update_time");
         IPage iPage = userMapper.selectPage(page,userQueryWrapper);
         return ServerResponse.createBySuccess(iPage.getRecords());
 
+    }
+
+    @Override
+    public ServerResponse updateUser(User user) {
+        return userMapper.updateById(user)>0?
+                ServerResponse.createBySuccessMessage("修改成功"):
+                ServerResponse.createByErrorMessage("修改失败");
     }
 
 
@@ -110,6 +117,8 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
         }
         throw new ConflictException("密码错误，修改失败");
     }
+
+
 
 
 }

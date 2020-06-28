@@ -2,6 +2,7 @@ package com.library.controller;
 
 import com.library.common.ServerResponse;
 import com.library.model.Form.queryUserForm;
+import com.library.pojo.User;
 import com.library.service.impl.UserService;
 import io.swagger.annotations.Api;
 
@@ -32,6 +33,21 @@ public class UserController {
     public ServerResponse queryByForm(queryUserForm queryUserForm){
         return userService.queryByForm(queryUserForm);
     }
+
+
+    @ApiOperation("删除用户")
+    @DeleteMapping("/{id:\\d+}")
+    public ServerResponse removeUser(@PathVariable Integer id){
+        return userService.removeUser(id);
+    }
+
+    @ApiOperation("修改用户信息")
+    @PutMapping
+    public  ServerResponse updateUser(User user){
+        return userService.updateUser(user);
+    }
+
+
 
 }
 

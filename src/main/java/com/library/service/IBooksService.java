@@ -24,7 +24,7 @@ public interface IBooksService extends IService<Books> {
 
     ServerResponse deleteBooks(Integer id);
 
-    ServerResponse updateBook(Integer id,Books books);
+    ServerResponse updateBook(Books books);
 
     ServerResponse BorrowBook(Integer BookId);
 

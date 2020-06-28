@@ -24,7 +24,6 @@ public class JWTUtil {
 
     /**
      * 校验 token是否正确
-     *
      * @param token  密钥
      * @param secret 用户的密码
      * @return 是否正确

@@ -1,9 +1,13 @@
 package com.library.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.library.common.ServerResponse;
+import com.library.pojo.BookType;
+import com.library.service.impl.BookTypeService;
+import com.library.service.impl.BooksService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -16,6 +20,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/bookType")
 public class BookTypeController {
+
+    @Autowired
+    BookTypeService bookTypeService;
+
+    @ApiOperation("增加图书类别")
+    @PutMapping
+    public ServerResponse addBookType(BookType bookType){
+        return bookTypeService.addBookType(bookType);
+    }
+
+    @ApiOperation("根据id删除图书类别")
+    @DeleteMapping("/{id:\\d+}")
+    public ServerResponse removeBookType(@PathVariable Integer id){
+        return bookTypeService.removeBookType(id);
+    }
+
+    @ApiOperation("更新图书类别")
+    @PutMapping("/updateBookType")
+    public ServerResponse updateBookType(BookType bookType){
+        return bookTypeService.updateBookType(bookType);
+    }
+
+    @ApiOperation("查询所有图书种类")
+    @GetMapping
+    public  ServerResponse queryAllBookType(){
+        return bookTypeService.queryAllBookType();
+    }
 
 }
 

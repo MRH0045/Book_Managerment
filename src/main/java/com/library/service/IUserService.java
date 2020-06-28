@@ -23,6 +23,8 @@ public interface IUserService extends IService<User> {
 
     ServerResponse queryByForm(queryUserForm queryUserForm);
 
+    ServerResponse updateUser(User user);
+
     boolean updatePassword(String code, String oldPassword, String newPassword);
 
 }

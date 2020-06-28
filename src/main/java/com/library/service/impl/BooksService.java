@@ -4,7 +4,6 @@ package com.library.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
 import com.library.common.Const;
 import com.library.common.ServerResponse;
 import com.library.dao.BorrowLogMapper;
@@ -77,9 +76,9 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
                 .like(queryBooksForm.getKeyWords()!=null,"name_pub",queryBooksForm.getKeyWords()).or()
                 .like(queryBooksForm.getKeyWords()!=null,"details",queryBooksForm.getKeyWords())
                 .eq(queryBooksForm.getBookKind()!=null,"book_kind",queryBooksForm.getBookKind())
-                .eq(queryBooksForm.getBookSite()!=null,"book_site",queryBooksForm.getBookSite());
-//                .orderByDesc(queryBooksForm.getSortType()==1,"create_time")
- //              .orderByDesc(queryBooksForm.getSortType()==0,"update_time");
+                .eq(queryBooksForm.getBookSite()!=null,"book_site",queryBooksForm.getBookSite())
+               .orderByDesc(queryBooksForm.getSortType()==1&&queryBooksForm.getSortType()!=null,"create_time")
+              .orderByDesc(queryBooksForm.getSortType()==0&&queryBooksForm.getSortType()!=null,"update_time");
         IPage iPage = booksMapper.selectPage(page, queryWrapper);
         if(iPage.getRecords().isEmpty()){
             return ServerResponse.createBySuccessMessage("无符合条件的图书！");
@@ -109,14 +108,20 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
          * @return com.library.common.ServerResponse
          **/
     @Override
-    public ServerResponse updateBook(Integer id, Books books) {
-        books.setId(id);
+    public ServerResponse updateBook( Books books) {
         books.setUpdateTime(LocalDateTime.now());
         return booksMapper.updateById(books)>0?
                 ServerResponse.createBySuccessMessage("更新成功！"):
                 ServerResponse.createByErrorMessage("更新失败！");
     }
 
+    /**
+         * @Author MRH0045
+         * @Description 用户借书
+         * @Date 13:50 2020/6/28
+         * @Param [BookId]
+         * @return com.library.common.ServerResponse
+         **/
     @Override
     public ServerResponse BorrowBook(Integer BookId) {
         String code = userManage.getCodeByToken();
@@ -129,6 +134,8 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
             BorrowLog borrowLog = new BorrowLog();
             if(books.getLendCount()<books.getTotal()){
                 books.setLendCount(books.getLendCount()+1);
+                user.setBrrowedCount(user.getBrrowedCount()+1);
+                userMapper.updateById(user);
                 booksMapper.updateById(books);
                 borrowLog.setBookId(BookId);
                 borrowLog.setUserId(user.getId());
@@ -145,8 +152,22 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
         return ServerResponse.createByErrorMessage("账户已过期！");
     }
 
+    /**
+         * @Author MRH0045
+         * @Description 用户还书
+         * @Date 13:50 2020/6/28
+         * @Param [BorrowLogId]
+         * @return com.library.common.ServerResponse
+         **/
+
     @Override
     public ServerResponse returnBook(Integer BorrowLogId) {
+        String code = userManage.getCodeByToken();
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("student_number",code);
+        User user = userMapper.selectOne(wrapper);
+        user.setBrrowedCount(user.getBrrowedCount()-1);
+        userMapper.updateById(user);
         BorrowLog borrowLog = borrowLogMapper.selectById(BorrowLogId);
         Books books = booksMapper.selectById(borrowLog.getBookId());
         books.setLendCount(books.getLendCount()-1);
