@@ -19,4 +19,34 @@
         id, user_id, book_id, borrow_time, return_time, status, create_time, update_time
     </sql>
 
+    <select id="queryByForm" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from borrow_log
+        inner join books on borrow_log.book_id = books.id
+        inner join user on borrow_log.user_id = user.id
+        <where>
+            <if test="status != null and postType!=-1">
+                and status=#{status}
+            </if>
+            <if test="keyWords != null and keyWords!='' ">
+                and (books.name LIKE CONCAT('%',#{keyWords},'%')
+                or `books.isbn` LIKE CONCAT('%',#{keyWords},'%'))
+                or `books.author` LIKE CONCAT('%',#{keyWords},'%'))
+                or `books.details` LIKE CONCAT('%',#{keyWords},'%'))
+                or `user.name` LIKE CONCAT('%',#{keyWords},'%'))
+                or `user.student_number` LIKE CONCAT('%',#{keyWords},'%'))
+                or `user.details` LIKE CONCAT('%',#{keyWords},'%'))
+            </if>
+        </where>
+        <if test="sortType == 0">
+            order by update_time DESC
+        </if>
+        <if test="sortType != 0">
+            order by create_time DESC
+        </if>
+    </select>
+
+
+
 </mapper>

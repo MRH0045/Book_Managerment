@@ -106,6 +106,8 @@ public class BorrowLogService extends ServiceImpl<BorrowLogMapper, BorrowLog> im
         for(BorrowLog borrowLog: borrowLogList){
             Map<String, Object> data = new HashMap<>();
             Books books = booksMapper.selectById(borrowLog.getBookId());
+            User user1 = userMapper.selectById(borrowLog.getUserId());
+            data.put("user",user1);
             data.put("borrowLog",borrowLog);
             data.put("book",books);
             allData.add(data);
