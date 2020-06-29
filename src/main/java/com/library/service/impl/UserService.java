@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 
 /**
  * <p>
@@ -81,11 +83,15 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
                 .like(queryUserForm.getKeyWords()!=null,"student_number",queryUserForm.getKeyWords()).or()
                 .like(queryUserForm.getKeyWords()!=null,"phone",queryUserForm.getKeyWords()).or()
                 .like(queryUserForm.getKeyWords()!=null,"details",queryUserForm.getKeyWords())
+                .eq(queryUserForm.getStatus()!=null,"status",queryUserForm.getStatus())
             .orderByDesc(queryUserForm.getSortType()==0,"create_time")
                .orderByDesc(queryUserForm.getSortType()==1,"update_time");
         IPage iPage = userMapper.selectPage(page,userQueryWrapper);
-        return ServerResponse.createBySuccess(iPage.getRecords());
-
+        HashMap<String,Object> list = new HashMap<>();
+        list.put("data",iPage.getRecords());
+        list.put("CurrentPage",iPage.getCurrent());
+        list.put("total",iPage.getTotal());
+        return ServerResponse.createBySuccess(list);
     }
 
     @Override

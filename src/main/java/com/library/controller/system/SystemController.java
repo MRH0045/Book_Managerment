@@ -60,16 +60,14 @@ public class SystemController {
     }
 
     @PostMapping("register")
-    @ApiOperation("注册")
+    @ApiOperation("用户注册")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "code", value = "工号或学号", required = true, paramType = "form"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "role", value = "角色", required = true, paramType = "form")
     })
     public ServerResponse register(@NonNull String code,
-                                   @NonNull String password,
-                                   @NonNull String role) {
-        return userManage.register(code, password, role);
+                                   @NonNull String password) {
+        return userManage.register(code, password);
     }
 
     @PostMapping("changePassword")

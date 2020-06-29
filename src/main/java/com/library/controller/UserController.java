@@ -29,7 +29,7 @@ public class UserController {
 
 
     @ApiOperation("根据表单分页查找满足条件的用户")
-    @GetMapping()
+    @GetMapping("/query")
     public ServerResponse queryByForm(queryUserForm queryUserForm){
         return userService.queryByForm(queryUserForm);
     }

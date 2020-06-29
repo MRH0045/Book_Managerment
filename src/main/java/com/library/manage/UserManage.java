@@ -194,8 +194,7 @@ public class UserManage {
          * @Param [code, password, role]
          * @return com.library.common.ServerResponse
          **/
-    public ServerResponse register(String code, String password, String role) {
-        if (role.equals(Const.USER)) {          // 学生注册
+    public ServerResponse register(String code, String password) {// 学生注册
             User user  = userService.getByCode(code);
             // 学号不能重复
             if (user == null) {
@@ -203,25 +202,16 @@ public class UserManage {
                 s.setStudentNumber(code);
                 s.setPassword(password);
                 userService.saveOrUpdate(s);
+                Role role = new Role();
+                role.setCode(code);
+                role.setRole(Const.USER);
+                role.setCreateTime(LocalDateTime.now());
+                role.setUpdateTime(LocalDateTime.now());
+                roleService.saveOrUpdate(role);
                 return ServerResponse.createBySuccessMessage("注册成功");
             } else {
                 return ServerResponse.createByErrorMessage("此学号已被注册");
             }
-        } else if (role.equals(Const.LIBMANAGER)) {  // 教师注册
-            LibManager libManager = libManagerService.getByCode(code);
-            // 工号不能重复
-            if (libManager == null) {
-                LibManager t = new LibManager();
-                t.setUsername(code);
-                t.setPassword(password);
-                libManagerService.saveOrUpdate(t);
-                return ServerResponse.createBySuccessMessage("注册成功");
-            } else {
-                return ServerResponse.createByErrorMessage("此工号已被注册");
-            }
-        }
-        // 注册失败
-        return ServerResponse.createByErrorMessage("注册失败");
     }
 
     /**

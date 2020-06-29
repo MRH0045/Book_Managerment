@@ -7,7 +7,7 @@ import lombok.Data;
 public class queryUserForm extends BasePagination {
 
     private String keyWords;
-    private Integer sex;
+    private Integer status;
     private Integer sortType;
 
 }
