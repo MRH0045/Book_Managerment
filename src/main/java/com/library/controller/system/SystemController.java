@@ -81,14 +81,11 @@ public class SystemController {
         return userManage.changePassword(passwordForm.getOldPassword(), passwordForm.getNewPassword());
     }
 
-    @PostMapping("/uploadAvatar")
+    @PostMapping("uploadAvatar")
     @ApiOperation("上传头像")
     @Permission
-    public ServerResponse uploadAvatar(@RequestParam("file") MultipartFile image) throws IOException {
+    public ServerResponse uploadAvatar(@RequestParam("image") MultipartFile image) throws IOException {
         return userManage.uploadAvatar(image);
     }
-
-
-
 
 }
