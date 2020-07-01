@@ -44,26 +44,22 @@ public class BooksController {
 
     @ApiOperation("根据表单分页查询一定数量的图书")
 //    @ApiImplicitParam(name="queryBooksForm",value="查询表单",required=true,paramType="query")
-    @GetMapping("query")
-    public ServerResponse query(queryBooksForm queryBooksForm){
+    @GetMapping("/query")
+    public ServerResponse query( queryBooksForm queryBooksForm){
         return booksService.queryBooksByForm(queryBooksForm);
     }
 
     @ApiOperation("用户借书")
-    @PutMapping("/borrow")
-    public  ServerResponse borrowBook(Integer bookId){
-        return booksService.BorrowBook(bookId);
+    @PutMapping("/borrow/{id}")
+    public  ServerResponse borrowBook(@PathVariable("id")Integer id){
+        return booksService.BorrowBook(id);
     }
 
     @ApiOperation("归还图书")
-    @PutMapping("/return")
-    public ServerResponse returnBook(Integer borrowLogId){
-        return booksService.returnBook(borrowLogId);
+    @PutMapping("/return/{id}")
+    public ServerResponse returnBook(@PathVariable("id")Integer id){
+        return booksService.returnBook(id);
     }
-
-
-
-
 
 }
 

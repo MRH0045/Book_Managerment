@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-
+import java.util.HashMap;
 
 
 /**
@@ -42,6 +42,7 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
     @Autowired(required = false)
     BorrowLogMapper borrowLogMapper;
 
+    @Autowired
     UserManage userManage;
 
     /**
@@ -53,6 +54,7 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
          **/
     @Override
     public ServerResponse AddBooks(Books books) {
+        books.setLendCount(0);
         books.setCreateTime(LocalDateTime.now());
         books.setUpdateTime(LocalDateTime.now());
         return booksMapper.insert(books)>0?
@@ -80,10 +82,11 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
                .orderByDesc(queryBooksForm.getSortType()==1&&queryBooksForm.getSortType()!=null,"create_time")
               .orderByDesc(queryBooksForm.getSortType()==0&&queryBooksForm.getSortType()!=null,"update_time");
         IPage iPage = booksMapper.selectPage(page, queryWrapper);
-        if(iPage.getRecords().isEmpty()){
-            return ServerResponse.createBySuccessMessage("无符合条件的图书！");
-        }
-        return ServerResponse.createBySuccess(iPage.getRecords());
+        HashMap<String,Object> list = new HashMap<>();
+        list.put("data",iPage.getRecords());
+        list.put("CurrentPage",iPage.getCurrent());
+        list.put("total",iPage.getTotal());
+        return ServerResponse.createBySuccess(list);
     }
 
     /**
