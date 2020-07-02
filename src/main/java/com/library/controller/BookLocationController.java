@@ -35,8 +35,8 @@ public class BookLocationController {
          * @return com.library.common.ServerResponse
          **/
     @ApiOperation(value = "添加图书定位")
-    @PostMapping
-    public ServerResponse addBookLocation(@RequestBody BookLocation bookLocation){
+    @PutMapping("/save")
+    public ServerResponse addBookLocation(BookLocation bookLocation){
         return bookLocationService.addBookLocation(bookLocation);
     }
 

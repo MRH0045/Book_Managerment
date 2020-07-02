@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -25,15 +26,16 @@ import java.util.List;
 public class BookLocationService extends ServiceImpl<BookLocationMapper, BookLocation> implements IBookLocationService {
 
 
-    @Autowired
+    @Autowired(required = false)
     BookLocationMapper bookLocationMapper;
 
     @Override
     public ServerResponse addBookLocation(BookLocation bookLocation) {
-
+        bookLocation.setCreateTime(LocalDateTime.now());
+        bookLocation.setUpdateTime(LocalDateTime.now());
         return bookLocationMapper.insert(bookLocation)>0?
-                ServerResponse.createBySuccessMessage("更新成功"):
-                ServerResponse.createByErrorMessage("更新失败");
+                ServerResponse.createBySuccessMessage("添加成功"):
+                ServerResponse.createByErrorMessage("添加失败");
     }
 
     @Override

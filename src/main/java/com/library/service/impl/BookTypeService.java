@@ -56,7 +56,7 @@ public class BookTypeService extends ServiceImpl<BookTypeMapper, BookType> imple
         QueryWrapper<BookType> wrapper = new QueryWrapper<>();
         wrapper.eq("name",bookType.getName());
         BookType bookType1 = bookTypeMapper.selectOne(wrapper);
-        if(bookType1!=null){
+        if(bookType1==null){
             bookType.setUpdateTime(LocalDateTime.now());
             return bookTypeMapper.updateById(bookType)>0?
                     ServerResponse.createBySuccessMessage("更新成功"):
