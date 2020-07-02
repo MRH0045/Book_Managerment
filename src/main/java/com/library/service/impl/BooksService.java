@@ -84,8 +84,8 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
         IPage iPage = booksMapper.selectPage(page, queryWrapper);
         HashMap<String,Object> list = new HashMap<>();
         list.put("data",iPage.getRecords());
-        list.put("CurrentPage",iPage.getCurrent());
-        list.put("total",iPage.getTotal());
+        list.put("CurrentPage",(int)iPage.getCurrent());
+        list.put("total",(int)iPage.getTotal());
         return ServerResponse.createBySuccess(list);
     }
 

@@ -33,7 +33,6 @@ public class UserVo {
 
     private String title;
 
-
     private String studentNumber;
 
     private String password;
@@ -41,7 +40,6 @@ public class UserVo {
     private String headPortrait;
 
     private String phone;
-
 
     private String username;
     /**

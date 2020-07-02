@@ -55,7 +55,6 @@ public class SystemController {
     public ServerResponse getUserInfo(@RequestBody UserVo userVo) {
         if (userManage.updateUserInfo(userVo))
             return ServerResponse.createBySuccessMessage("修改成功");
-
         return ServerResponse.createByErrorMessage("修改失败");
     }
 

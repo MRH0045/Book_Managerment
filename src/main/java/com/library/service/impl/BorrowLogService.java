@@ -114,8 +114,8 @@ public class BorrowLogService extends ServiceImpl<BorrowLogMapper, BorrowLog> im
         }
         HashMap<String,Object> list = new HashMap<>();
         list.put("data",allData);
-        list.put("CurrentPage",iPage.getCurrent());
-        list.put("total",iPage.getTotal());
+        list.put("CurrentPage",(int)iPage.getCurrent());
+        list.put("total",(int)iPage.getTotal());
         return ServerResponse.createBySuccess(list);
     }
 

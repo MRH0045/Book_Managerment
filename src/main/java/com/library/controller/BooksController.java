@@ -32,6 +32,13 @@ public class BooksController {
         return booksService.AddBooks(books);
     }
 
+
+    @ApiOperation("更新图书")
+    @PutMapping("/update")
+    public ServerResponse updateBook(@RequestBody Books books){
+        return booksService.updateBook(books);
+    }
+
     @ApiOperation("删除图书")
     @ApiImplicitParam(name = "id", value = "图书id", required = true, paramType = "path", dataType = "int", example = "1")
     @DeleteMapping("/{id:\\d+}")

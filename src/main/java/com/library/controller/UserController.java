@@ -43,7 +43,7 @@ public class UserController {
 
     @ApiOperation("修改用户信息")
     @PutMapping
-    public  ServerResponse updateUser(User user){
+    public  ServerResponse updateUser(@RequestBody User user){
         return userService.updateUser(user);
     }
 

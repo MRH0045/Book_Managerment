@@ -89,8 +89,8 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
         IPage iPage = userMapper.selectPage(page,userQueryWrapper);
         HashMap<String,Object> list = new HashMap<>();
         list.put("data",iPage.getRecords());
-        list.put("CurrentPage",iPage.getCurrent());
-        list.put("total",iPage.getTotal());
+        list.put("CurrentPage",(int)iPage.getCurrent());
+        list.put("total",(int)iPage.getTotal());
         return ServerResponse.createBySuccess(list);
     }
 
@@ -100,7 +100,6 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
                 ServerResponse.createBySuccessMessage("修改成功"):
                 ServerResponse.createByErrorMessage("修改失败");
     }
-
 
     /**
          * @Author MRH0045
