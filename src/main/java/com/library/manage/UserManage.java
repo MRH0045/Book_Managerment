@@ -201,6 +201,8 @@ public class UserManage {
                 User s = new User();
                 s.setStudentNumber(code);
                 s.setPassword(password);
+                s.setBrrowedCount(0);
+                s.setStatus(0);
                 userService.saveOrUpdate(s);
                 Role role = new Role();
                 role.setCode(code);

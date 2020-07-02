@@ -27,6 +27,8 @@ public class BookTypeService extends ServiceImpl<BookTypeMapper, BookType> imple
     @Autowired(required=false)
     BookTypeMapper bookTypeMapper;
 
+
+
     @Override
     public ServerResponse addBookType(BookType bookType) {
         QueryWrapper<BookType> wrapper = new QueryWrapper<>();
