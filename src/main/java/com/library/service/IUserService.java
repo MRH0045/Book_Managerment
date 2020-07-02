@@ -25,6 +25,8 @@ public interface IUserService extends IService<User> {
 
     ServerResponse updateUser(User user);
 
+    ServerResponse BanUser(Integer id,Integer operation);
+
     boolean updatePassword(String code, String oldPassword, String newPassword);
 
 }

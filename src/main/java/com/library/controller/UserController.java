@@ -47,6 +47,12 @@ public class UserController {
         return userService.updateUser(user);
     }
 
+    @ApiOperation("封禁/解封用户")
+    @PutMapping("/ban")
+    public  ServerResponse updateUser(Integer id,Integer operation){
+        return userService.BanUser(id,operation);
+    }
+
 
 
 }

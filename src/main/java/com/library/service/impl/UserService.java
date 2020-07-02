@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.library.common.ServerResponse;
 import com.library.common.exception.ConflictException;
+import com.library.dao.BorrowLogMapper;
 import com.library.model.Form.queryUserForm;
+import com.library.pojo.BorrowLog;
 import com.library.pojo.User;
 import com.library.dao.UserMapper;
 import com.library.service.IUserService;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -30,6 +33,9 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
 
     @Autowired(required=false)
     UserMapper userMapper;
+
+    @Autowired(required=false)
+    BorrowLogMapper borrowLogMapper;
 
 
     @Override
@@ -62,9 +68,17 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
          **/
     @Override
     public ServerResponse removeUser(Integer id) {
-        return userMapper.deleteById(id)>0?
-                ServerResponse.createBySuccessMessage("删除成功！"):
-                ServerResponse.createByErrorMessage("删除失败！");
+        QueryWrapper<BorrowLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",id);
+        List<BorrowLog> list = borrowLogMapper.selectList(queryWrapper);
+        if(list.isEmpty()){
+            return userMapper.deleteById(id)>0?
+                    ServerResponse.createBySuccessMessage("删除成功！"):
+                    ServerResponse.createByErrorMessage("删除失败！");
+        }
+        else
+            return  ServerResponse.createByErrorMessage("该用户还有未还书籍，不能删除！");
+
     }
 
 
@@ -99,6 +113,16 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
         return userMapper.updateById(user)>0?
                 ServerResponse.createBySuccessMessage("修改成功"):
                 ServerResponse.createByErrorMessage("修改失败");
+    }
+
+    @Override
+    public ServerResponse BanUser(Integer id, Integer operation) {
+
+        User user = userMapper.selectById(id);
+        user.setStatus(operation);
+        return userMapper.updateById(user)>0?
+                ServerResponse.createBySuccessMessage("操作成功！"):
+                ServerResponse.createByErrorMessage("操作失败");
     }
 
     /**

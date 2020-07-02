@@ -93,13 +93,14 @@ public class BorrowLogService extends ServiceImpl<BorrowLogMapper, BorrowLog> im
         QueryWrapper<BorrowLog> BorrowLogWrapper = new QueryWrapper<>();
         IPage iPage =borrowLogMapper.selectPage(page,BorrowLogWrapper);
         List<BorrowLog> borrowLogList = null;
-        if(user != null){
-            BorrowLogWrapper.eq("user_id",user.getId())
-                    .eq(queryBorrowLogForm.getStatus()!=null&&queryBorrowLogForm.getKeyWords()!= "","status",queryBorrowLogForm.getStatus());
+        if(libManager!=null||sysManager!=null){
+            BorrowLogWrapper.eq(queryBorrowLogForm.getStatus()!=null&&queryBorrowLogForm.getKeyWords()!= "","status",queryBorrowLogForm.getStatus());
             iPage = borrowLogMapper.selectPage(page,BorrowLogWrapper);
             borrowLogList = iPage.getRecords();
-        }else if(libManager!=null||sysManager!=null){
-            BorrowLogWrapper.eq(queryBorrowLogForm.getStatus()!=null&&queryBorrowLogForm.getKeyWords()!= "","status",queryBorrowLogForm.getStatus());
+
+        }else if(user != null){
+            BorrowLogWrapper.eq("user_id",user.getId())
+                    .eq(queryBorrowLogForm.getStatus()!=null&&queryBorrowLogForm.getKeyWords()!= "","status",queryBorrowLogForm.getStatus());
             iPage = borrowLogMapper.selectPage(page,BorrowLogWrapper);
             borrowLogList = iPage.getRecords();
         }
