@@ -1,6 +1,7 @@
 package com.library.model.vo;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.library.pojo.LibManager;
 import com.library.pojo.SysManager;
 import com.library.pojo.User;
@@ -50,11 +51,13 @@ public class UserVo {
     /**
      * 生效时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime effDate;
 
     /**
      * 失效时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime expDete;
 
     /**
@@ -79,8 +82,10 @@ public class UserVo {
 
 //    private LocalDateTime loginTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime updateTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime createTime;
 
     public static UserVo convert(User user, String token) {

@@ -95,11 +95,11 @@ public class BorrowLogService extends ServiceImpl<BorrowLogMapper, BorrowLog> im
         List<BorrowLog> borrowLogList = null;
         if(user != null){
             BorrowLogWrapper.eq("user_id",user.getId())
-                    .eq(queryBorrowLogForm.getStatus()!=null,"status",queryBorrowLogForm.getStatus());
+                    .eq(queryBorrowLogForm.getStatus()!=null&&queryBorrowLogForm.getKeyWords()!= "","status",queryBorrowLogForm.getStatus());
             iPage = borrowLogMapper.selectPage(page,BorrowLogWrapper);
             borrowLogList = iPage.getRecords();
         }else if(libManager!=null||sysManager!=null){
-            BorrowLogWrapper.eq(queryBorrowLogForm.getStatus()!=null,"status",queryBorrowLogForm.getStatus());
+            BorrowLogWrapper.eq(queryBorrowLogForm.getStatus()!=null&&queryBorrowLogForm.getKeyWords()!= "","status",queryBorrowLogForm.getStatus());
             iPage = borrowLogMapper.selectPage(page,BorrowLogWrapper);
             borrowLogList = iPage.getRecords();
         }

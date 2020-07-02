@@ -73,10 +73,10 @@ public class BooksService extends ServiceImpl<BooksMapper, Books> implements IBo
     public ServerResponse queryBooksByForm(queryBooksForm queryBooksForm) {
         Page page = new Page<>(queryBooksForm.getPage(),queryBooksForm.getPageSize());
         QueryWrapper<Books> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(queryBooksForm.getKeyWords()!=null,"name",queryBooksForm.getKeyWords()).or()
-                .like(queryBooksForm.getKeyWords()!=null,"author",queryBooksForm.getKeyWords()).or()
-                .like(queryBooksForm.getKeyWords()!=null,"name_pub",queryBooksForm.getKeyWords()).or()
-                .like(queryBooksForm.getKeyWords()!=null,"details",queryBooksForm.getKeyWords())
+        queryWrapper.like(queryBooksForm.getKeyWords()!=null&&queryBooksForm.getKeyWords()!= "","name",queryBooksForm.getKeyWords()).or()
+                .like(queryBooksForm.getKeyWords()!=null&&queryBooksForm.getKeyWords()!="","author",queryBooksForm.getKeyWords()).or()
+                .like(queryBooksForm.getKeyWords()!=null&&queryBooksForm.getKeyWords()!="","name_pub",queryBooksForm.getKeyWords()).or()
+                .like(queryBooksForm.getKeyWords()!=null&&queryBooksForm.getKeyWords()!="","details",queryBooksForm.getKeyWords())
                 .eq(queryBooksForm.getBookKind()!=null,"book_kind",queryBooksForm.getBookKind())
                 .eq(queryBooksForm.getBookSite()!=null,"book_site",queryBooksForm.getBookSite())
                .orderByDesc(queryBooksForm.getSortType()==1&&queryBooksForm.getSortType()!=null,"create_time")

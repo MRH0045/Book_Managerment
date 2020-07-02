@@ -79,10 +79,10 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IUserS
     public ServerResponse queryByForm(queryUserForm queryUserForm) {
         Page page = new Page<>(queryUserForm.getPage(),queryUserForm.getPageSize());
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.like(queryUserForm.getKeyWords()!=null,"name",queryUserForm.getKeyWords()).or()
-                .like(queryUserForm.getKeyWords()!=null,"student_number",queryUserForm.getKeyWords()).or()
-                .like(queryUserForm.getKeyWords()!=null,"phone",queryUserForm.getKeyWords()).or()
-                .like(queryUserForm.getKeyWords()!=null,"details",queryUserForm.getKeyWords())
+        userQueryWrapper.like(queryUserForm.getKeyWords()!=null&&queryUserForm.getKeyWords()!="","name",queryUserForm.getKeyWords()).or()
+                .like(queryUserForm.getKeyWords()!=null&&queryUserForm.getKeyWords()!="","student_number",queryUserForm.getKeyWords()).or()
+                .like(queryUserForm.getKeyWords()!=null&&queryUserForm.getKeyWords()!="","phone",queryUserForm.getKeyWords()).or()
+                .like(queryUserForm.getKeyWords()!=null&&queryUserForm.getKeyWords()!="","details",queryUserForm.getKeyWords())
                 .eq(queryUserForm.getStatus()!=null,"status",queryUserForm.getStatus())
             .orderByDesc(queryUserForm.getSortType()==0,"create_time")
                .orderByDesc(queryUserForm.getSortType()==1,"update_time");
